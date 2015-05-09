@@ -114,10 +114,10 @@ def _parse_env(data_string):
         data = filter(
             lambda l: len(l) == 2 ,
             (
-                map(
+                list(map(
                     str.strip,
                     line.split('=')
-                )
+                ))
                 for line in data_string.split("\n"))
         )
     else:
