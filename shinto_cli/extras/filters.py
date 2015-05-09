@@ -1,5 +1,6 @@
 """ Custom Jinja2 filters """
 
+from jinja2 import is_undefined
 import re
 
 
@@ -28,6 +29,10 @@ def docker_link(value, format='{addr}:{port}'):
     :param format: The format to apply. Supported placeholders: `{proto}`, `{addr}`, `{port}`
     :return: Formatted string
     """
+    # pass undefined values on down the pipeline
+    if(is_undefined(value)):
+        return value
+
     # Parse the value
     m = re.match(r'(?P<proto>.+)://' r'(?P<addr>.+):' r'(?P<port>.+)$', value)
     if not m:
