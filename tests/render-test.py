@@ -24,8 +24,11 @@ class RenderTest(unittest.TestCase):
 
     def _testme(self, argv, stdin=None, env=None):
         """ Helper test shortcut """
-        self.assertEqual(self.expected_output,
-                         render_command(os.getcwd(), env or {}, stdin, argv))
+        result = render_command(os.getcwd(), env or {}, stdin, argv)
+        if(isinstance(result, str)):
+            self.assertEqual(self.expected_output, result)
+        else:
+            self.assertEqual(self.expected_output.encode('UTF-8'), result)
 
     def test_ini(self):
         # Filename
