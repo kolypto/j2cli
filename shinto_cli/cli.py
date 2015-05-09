@@ -1,4 +1,4 @@
-import os, sys
+import io, os, sys
 import argparse
 import glob
 
@@ -23,7 +23,7 @@ class FilePathLoader(jinja2.BaseLoader):
 
         # Read
         try:
-            with open(template, 'r') as f:
+            with io.open(template, 'rb') as f:
                 contents = f.read().decode(self.encoding)
         except IOError:
             raise jinja2.TemplateNotFound(template)
@@ -164,4 +164,5 @@ def main():
         sys.stdin,
         sys.argv[1:]
     )
-    sys.stdout.write(output)
+    outstream = getattr(sys.stdout, 'buffer', sys.stdout)
+    outstream.write(output)

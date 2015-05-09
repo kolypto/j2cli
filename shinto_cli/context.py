@@ -1,5 +1,11 @@
 import sys
 
+# Patch basestring in for python 3 compat
+try:
+    basestring
+except NameError:
+    basestring = str
+
 #region Parsers
 
 def _parse_ini(data_string):
