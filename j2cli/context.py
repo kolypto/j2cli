@@ -1,6 +1,5 @@
-import sys
+# region Parsers
 
-#region Parsers
 
 def _parse_ini(data_string):
     """ INI data input format.
@@ -40,6 +39,7 @@ def _parse_ini(data_string):
     # Export
     return ini.as_dict()
 
+
 def _parse_json(data_string):
     """ JSON data input format
 
@@ -62,6 +62,7 @@ def _parse_json(data_string):
     """
     return json.loads(data_string)
 
+
 def _parse_yaml(data_string):
     """ YAML data input format.
 
@@ -80,6 +81,7 @@ def _parse_yaml(data_string):
         $ cat data.yml | j2 --format=yaml config.j2
     """
     return yaml.load(data_string)
+
 
 def _parse_env(data_string):
     """ Data input from environment variables.
@@ -106,7 +108,7 @@ def _parse_env(data_string):
     # Parse
     if isinstance(data_string, basestring):
         data = filter(
-            lambda l: len(l) == 2 ,
+            lambda l: len(l) == 2,
             (
                 map(
                     str.strip,
@@ -122,13 +124,13 @@ def _parse_env(data_string):
 
 
 FORMATS = {
-    'ini':  _parse_ini,
+    'ini': _parse_ini,
     'json': _parse_json,
     'yaml': _parse_yaml,
     'env': _parse_env
 }
 
-#endregion
+# endregion
 
 
 
@@ -141,7 +143,7 @@ except ImportError:
     try:
         import json
     except ImportError:
-         del FORMATS['json']
+        del FORMATS['json']
 
 # INI: Python 2 | Python 3
 try:
@@ -158,24 +160,27 @@ except ImportError:
 #endregion
 
 
-
-def read_context_data(format, f, environ):
+def read_context_data(data_format, f, environ, extra_args=None):
     """ Read context data into a dictionary
-    :param format: Data format
-    :type format: str
+    :param data_format: Data format
+    :type data_format: str
     :param f: Data file stream, or None
     :type f: file|None
     :return: Dictionary with the context data
     :rtype: dict
     """
     # Special case: environment variables
-    if format == 'env' and f is None:
+    if data_format == 'env' and f is None:
         return _parse_env(environ)
 
     # Read data string stream
     data_string = f.read()
 
     # Parse it
-    if format not in FORMATS:
-        raise ValueError('{} format unavailable'.format(format))
-    return FORMATS[format](data_string)
+    if data_format not in FORMATS:
+        raise ValueError('{} format unavailable'.format(data_format))
+
+    if not extra_args:
+        return FORMATS[data_format](data_string)
+    else:
+        return dict(FORMATS[data_format](data_string), **extra_args)

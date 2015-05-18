@@ -1,12 +1,25 @@
-import os, sys
+import sys
 import argparse
 
+import os
 import jinja2
 import jinja2.loaders
 from . import __version__
-
 from .context import read_context_data, FORMATS
 from .extras import filters
+
+
+class StoreNameValuePair(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        try:
+            n, v = values.split('=')
+            val = eval(v)
+            setattr(namespace, n, val)
+        except ValueError:
+            return
+        except NameError:
+            print "Incorrect formatted extra_args example: extra_args=\"{'a':1}\" be careful with the quote marks! "
+            exit(1)
 
 
 class FilePathLoader(jinja2.BaseLoader):
@@ -43,7 +56,7 @@ def render_template(cwd, template_path, context):
     """
     env = jinja2.Environment(
         loader=FilePathLoader(cwd),
-        undefined=jinja2.StrictUndefined # raises errors for undefined variables
+        undefined=jinja2.StrictUndefined  # raises errors for undefined variables
     )
 
     # Register extras
@@ -79,6 +92,8 @@ def render_command(cwd, environ, stdin, argv):
     parser.add_argument('-f', '--format', default='?', help='Input data format', choices=['?'] + list(FORMATS.keys()))
     parser.add_argument('template', help='Template file to process')
     parser.add_argument('data', nargs='?', default='-', help='Input data path')
+    parser.add_argument("extra_args", action=StoreNameValuePair, default=None)
+
     args = parser.parse_args(argv)
 
     # Input: guess format
@@ -100,11 +115,15 @@ def render_command(cwd, environ, stdin, argv):
     else:
         input_data_f = stdin if args.data == '-' else open(args.data)
 
+    # Append command line extra_args
+    extra_args = args.extra_args
+
     # Read data
     context = read_context_data(
         args.format,
         input_data_f,
-        environ
+        environ,
+        extra_args
     )
 
     # Render

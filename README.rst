@@ -68,6 +68,12 @@ Or even read environment variables from a file:
 
     $ j2 --format=env config.j2 data.env
 
+
+Append extra command line arguments:
+
+::
+    $ j2 config.j2 data.yaml extra_args="{'a':1}"
+
 Reference
 =========
 
@@ -81,6 +87,8 @@ Options:
 
 -  ``--format, -f``: format for the data file. The default is ``?``:
    guess from file extension.
+
+- ``extra_args, -e``: Evals the value of this option using python's `eval()` function
 
 There is some special behavior with environment variables:
 
