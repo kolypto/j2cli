@@ -1,4 +1,16 @@
-import sys
+from __future__ import unicode_literals
+
+try:
+    basestring # pylint: disable=pointless-statement
+    strip = unicode.strip
+except NameError:
+    basestring = str # pylint: disable=redefined-builtin
+    strip = str.strip
+
+try:
+    import itertools.imap as map # pylint: disable=redefined-builtin
+except ImportError:
+    pass
 
 #region Parsers
 
@@ -19,7 +31,7 @@ def _parse_ini(data_string):
         $ j2 config.j2 data.ini
         $ cat data.ini | j2 --format=ini config.j2
     """
-    from io import BytesIO
+    from io import StringIO
 
     # Override
     class MyConfigParser(ConfigParser.ConfigParser):
@@ -35,7 +47,7 @@ def _parse_ini(data_string):
 
     # Parse
     ini = MyConfigParser()
-    ini.readfp(BytesIO(data_string))
+    ini.readfp(StringIO(data_string))
 
     # Export
     return ini.as_dict()
@@ -108,11 +120,12 @@ def _parse_env(data_string):
         data = filter(
             lambda l: len(l) == 2 ,
             (
-                map(
-                    str.strip,
+                list(map(
+                    strip,
                     line.split('=')
-                )
-                for line in data_string.split("\n"))
+                ))
+                for line in data_string.split("\n")
+            )
         )
     else:
         data = data_string

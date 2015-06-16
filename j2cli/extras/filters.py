@@ -1,5 +1,5 @@
 """ Custom Jinja2 filters """
-
+from __future__ import unicode_literals
 import re
 
 

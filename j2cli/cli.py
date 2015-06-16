@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from io import open # pylint: disable=redefined-builtin
 import os, sys
 import argparse
 
@@ -22,8 +24,8 @@ class FilePathLoader(jinja2.BaseLoader):
 
         # Read
         try:
-            with open(template, 'r') as f:
-                contents = f.read().decode(self.encoding)
+            with open(template, 'rt', encoding=self.encoding) as f:
+                contents = f.read()
         except IOError:
             raise jinja2.TemplateNotFound(template)
 
@@ -51,8 +53,7 @@ def render_template(cwd, template_path, context):
 
     return env \
         .get_template(template_path) \
-        .render(context) \
-        .encode('utf-8')
+        .render(context)
 
 
 def render_command(cwd, environ, stdin, argv):
@@ -98,7 +99,8 @@ def render_command(cwd, environ, stdin, argv):
     if args.data == '-' and args.format == 'env':
         input_data_f = None
     else:
-        input_data_f = stdin if args.data == '-' else open(args.data)
+        # Warning: assumes utf-8 for input file encoding
+        input_data_f = stdin if args.data == '-' else open(args.data, encoding="utf-8")
 
     # Read data
     context = read_context_data(

@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 """ j2cli main file """
+from __future__ import unicode_literals
 import pkg_resources
 
 __author__ = "Mark Vartanyan"

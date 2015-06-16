@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from io import open # pylint: disable=redefined-builtin
 import unittest
 import os.path
 
@@ -32,7 +34,7 @@ class RenderTest(unittest.TestCase):
         # Format
         self._testme(['--format=ini', 'resources/nginx.j2', 'resources/data.ini'])
         # Stdin
-        self._testme(['--format=ini', 'resources/nginx.j2'], stdin=open('resources/data.ini'))
+        self._testme(['--format=ini', 'resources/nginx.j2'], stdin=open('resources/data.ini', encoding='utf-8'))
 
     def test_json(self):
         # Filename
@@ -40,7 +42,7 @@ class RenderTest(unittest.TestCase):
         # Format
         self._testme(['--format=json', 'resources/nginx.j2', 'resources/data.json'])
         # Stdin
-        self._testme(['--format=json', 'resources/nginx.j2'], stdin=open('resources/data.json'))
+        self._testme(['--format=json', 'resources/nginx.j2'], stdin=open('resources/data.json', encoding='utf-8'))
 
     def test_yaml(self):
         try:
@@ -54,7 +56,7 @@ class RenderTest(unittest.TestCase):
         # Format
         self._testme(['--format=yaml', 'resources/nginx.j2', 'resources/data.yml'])
         # Stdin
-        self._testme(['--format=yaml', 'resources/nginx.j2'], stdin=open('resources/data.yml'))
+        self._testme(['--format=yaml', 'resources/nginx.j2'], stdin=open('resources/data.yml', encoding='utf-8'))
 
     def test_env(self):
         # Filename
