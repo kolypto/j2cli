@@ -31,7 +31,7 @@ def docker_link(value, format='{addr}:{port}'):
     # Parse the value
     m = re.match(r'(?P<proto>.+)://' r'(?P<addr>.+):' r'(?P<port>.+)$', value)
     if not m:
-        raise ValueError('The provided value does not seems to be a Docker link: {}'.format(value))
+        raise ValueError('The provided value does not seems to be a Docker link: {0}'.format(value))
     d = m.groupdict()
 
     # Format
