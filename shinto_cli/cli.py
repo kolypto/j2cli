@@ -107,7 +107,7 @@ def render_command(cwd, environ, stdin, argv):
         epilog=''
     )
     parser.add_argument('-v', '--version', action='version',
-                        version='j2cli {}, Jinja2 {}'.format(__version__, jinja2.__version__))
+                        version='j2cli {0}, Jinja2 {1}'.format(__version__, jinja2.__version__))
 
     parser.add_argument('-f', '--format', default='?', help='Input data format', choices=['?'] + list(FORMATS.keys()))
     parser.add_argument('-g', '--glob', dest='glob', action='store_true', help='Turn on globbing support and automatic file saving.')

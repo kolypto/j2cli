@@ -185,5 +185,5 @@ def read_context_data(format, f, environ):
 
     # Parse it
     if format not in FORMATS:
-        raise ValueError('{} format unavailable'.format(format))
+        raise ValueError('{0} format unavailable'.format(format))
     return FORMATS[format](data_string)

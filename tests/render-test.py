@@ -24,7 +24,7 @@ class RenderTest(unittest.TestCase):
 
     def _testme(self, argv, stdin=None, env=None):
         """ Helper test shortcut """
-        result = render_command(os.getcwd(), env or {}, stdin, argv)
+        result = render_command(os.getcwd(), env or {0}, stdin, argv)
         if(isinstance(result, str)):
             self.assertEqual(self.expected_output, result)
         else:
