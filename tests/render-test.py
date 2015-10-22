@@ -1,7 +1,8 @@
 import unittest
 import os.path
 
-from j2cli.cli import render_command
+from shinto_cli.cli import render_command
+
 
 class RenderTest(unittest.TestCase):
     def setUp(self):

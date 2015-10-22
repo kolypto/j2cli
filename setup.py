@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-j2cli
+shinto-cli
 ==========
 
 Command-line interface to [Jinja2](http://jinja.pocoo.org/docs/) for templating in shell scripts.
@@ -12,17 +12,18 @@ Features:
 * INI, YAML, JSON data sources supported
 
 Inspired by [mattrobenolt/jinja2-cli](https://github.com/mattrobenolt/jinja2-cli)
+Inspired by [kolypto/jinja2-cli](https://github.com/kolypto/j2cli)
 """
 
 from setuptools import setup, find_packages
 
 setup(
-    name='j2cli',
+    name='shinto-cli',
     version='0.3.2-0',
-    author='Mark Vartanyan',
-    author_email='kolypto@gmail.com',
+    author='ISL',
+    author_email='dev@isl.co',
 
-    url='https://github.com/kolypto/j2cli',
+    url='https://github.com/istrategylabs/shinto-cli',
     license='BSD',
     description='Command-line interface to Jinja2 for templating in shell scripts.',
     long_description=__doc__,
@@ -32,7 +33,7 @@ setup(
     scripts=[],
     entry_points={
         'console_scripts': [
-            'j2 = j2cli:main',
+            'j2 = shinto_cli:main',
         ]
     },
 
