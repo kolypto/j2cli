@@ -66,3 +66,18 @@ class RenderTest(unittest.TestCase):
         env = dict(NGINX_HOSTNAME='localhost', NGINX_WEBROOT='/var/www/project', NGINX_LOGS='/var/log/nginx/')
         self._testme(['--format=env', 'resources/nginx-env.j2'], env=env)
         self._testme(['--format=env', 'resources/nginx-env.j2'], env=env)
+
+    def test_glob(self):
+        self.assertEqual('[\'resources/nginx-env\', \'resources/nginx-env2\']',
+                         render_command(os.getcwd(),
+                                        {},
+                                        None,
+                                        ['-g',
+                                         'resources/nginx-env*.j2',
+                                         'resources/data.env']))
+        with open('resources/nginx-env', 'r') as f:
+            self.assertEqual(self.expected_output,
+                             f.read())
+        with open('resources/nginx-env2', 'r') as f:
+            self.assertEqual(self.expected_output,
+                             f.read())

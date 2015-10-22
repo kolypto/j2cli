@@ -33,6 +33,8 @@ __pycache__
 *.py[cod]
 *.pot
 *.mo
+tests/resources/nginx-env
+tests/resources/nginx-env2
 
 # Runtime
 /*.log

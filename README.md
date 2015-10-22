@@ -62,6 +62,8 @@ Options:
 
 * `--format, -f`: format for the data file. The default is `?`: guess from file extension.
 
+* `--glob, -g`: allow globs for the template and writes files back without file extention. (e.g. "*.j2" writes "file1.html.j2" and "file2.html.j2" to "file1.html" and "file2.html" repectively)
+
 There is some special behavior with environment variables:
 
 * When `data` is not provided (data is `-`), `--format` defaults to `env` and thus reads environment variables
