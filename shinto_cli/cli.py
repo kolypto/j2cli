@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import io, os, sys
 import argparse
 import glob
@@ -78,8 +80,7 @@ def render_templates_and_save(cwd, template_path, context):
     for file_path in file_paths:
         compiled = env \
             .get_template(file_path) \
-            .render(context) \
-            .encode('utf-8')
+            .render(context)
         filename = os.path.splitext(file_path)[0]
         with io.open(filename, 'w') as f:
             f.write(compiled)
