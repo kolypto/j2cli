@@ -81,7 +81,7 @@ def render_templates_and_save(cwd, template_path, context):
             .render(context) \
             .encode('utf-8')
         filename = os.path.splitext(file_path)[0]
-        with open(filename, 'w') as f:
+        with io.open(filename, 'w') as f:
             f.write(compiled)
             written_files.append(filename)
     return str(written_files)

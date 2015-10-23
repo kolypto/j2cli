@@ -81,8 +81,14 @@ class RenderTest(unittest.TestCase):
                         ['[\'resources/nginx-env\', \'resources/nginx-env2\']',
                          '[\'resources/nginx-env2\', \'resources/nginx-env\']'])
         with open('resources/nginx-env', 'r') as f:
-            self.assertEqual(self.expected_output,
-                             f.read())
+            result = f.read()
+            if(isinstance(result, str)):
+                self.assertEqual(self.expected_output, result)
+            else:
+                self.assertEqual(self.expected_output.encode('UTF-8'), result)
         with open('resources/nginx-env2', 'r') as f:
-            self.assertEqual(self.expected_output,
-                             f.read())
+            result = f.read()
+            if(isinstance(result, str)):
+                self.assertEqual(self.expected_output, result)
+            else:
+                self.assertEqual(self.expected_output.encode('UTF-8'), result)
