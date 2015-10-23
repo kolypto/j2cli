@@ -1,9 +1,9 @@
 |Build Status|
 
-j2cli - Jinja2 Command-Line Tool
+shinto-cli - Jinja2 Command-Line Tool
 ================================
 
-``j2cli`` is a command-line tool for templating in shell-scripts,
+``shinto-cli`` is a command-line tool for templating in shell-scripts,
 leveraging the `Jinja2 <http://jinja.pocoo.org/docs/>`__ library.
 
 Features:
@@ -21,13 +21,13 @@ Installation
 
 ::
 
-    pip install j2cli
+    pip install shinto-cli
 
 To enable the YAML support with `pyyaml <http://pyyaml.org/>`__:
 
 ::
 
-    pip install j2cli[yaml]
+    pip install shinto-cli[yaml]
 
 Usage
 -----
@@ -81,6 +81,10 @@ Options:
 
 -  ``--format, -f``: format for the data file. The default is ``?``:
    guess from file extension.
+
+-  ``--glob, -g``: allow globs for the template and writes files back
+   without file extention. (e.g. "*.j2" writes "file1.html.j2" and 
+   "file2.html.j2" to "file1.html" and "file2.html" repectively)
 
 There is some special behavior with environment variables:
 

@@ -1,5 +1,8 @@
-import os, sys
+from __future__ import unicode_literals
+
+import io, os, sys
 import argparse
+import glob
 
 import jinja2
 import jinja2.loaders
@@ -22,7 +25,7 @@ class FilePathLoader(jinja2.BaseLoader):
 
         # Read
         try:
-            with open(template, 'r') as f:
+            with io.open(template, 'rb') as f:
                 contents = f.read().decode(self.encoding)
         except IOError:
             raise jinja2.TemplateNotFound(template)
@@ -55,6 +58,36 @@ def render_template(cwd, template_path, context):
         .encode('utf-8')
 
 
+def render_templates_and_save(cwd, template_path, context):
+    """ Render a template
+    :param template_path: Path to the template file
+    :type template_path: basestring
+    :param context: Template data
+    :type context: dict
+    :return: Rendered template
+    :rtype: basestring
+    """
+    env = jinja2.Environment(
+        loader=FilePathLoader(cwd),
+        undefined=jinja2.StrictUndefined # raises errors for undefined variables
+    )
+
+    # Register extras
+    env.filters['docker_link'] = filters.docker_link
+
+    file_paths = glob.glob(template_path)
+    written_files = []
+    for file_path in file_paths:
+        compiled = env \
+            .get_template(file_path) \
+            .render(context)
+        filename = os.path.splitext(file_path)[0]
+        with io.open(filename, 'w') as f:
+            f.write(compiled)
+            written_files.append(filename)
+    return str(written_files)
+
+
 def render_command(cwd, environ, stdin, argv):
     """ Pure render command
     :param cwd: Current working directory (to search for the files)
@@ -77,6 +110,8 @@ def render_command(cwd, environ, stdin, argv):
                         version='j2cli {}, Jinja2 {}'.format(__version__, jinja2.__version__))
 
     parser.add_argument('-f', '--format', default='?', help='Input data format', choices=['?'] + list(FORMATS.keys()))
+    parser.add_argument('-g', '--glob', dest='glob', action='store_true', help='Turn on globbing support and automatic file saving.')
+    parser.set_defaults(glob=False)
     parser.add_argument('template', help='Template file to process')
     parser.add_argument('data', nargs='?', default='-', help='Input data path')
     args = parser.parse_args(argv)
@@ -108,11 +143,18 @@ def render_command(cwd, environ, stdin, argv):
     )
 
     # Render
-    return render_template(
-        cwd,
-        args.template,
-        context
-    )
+    if args.glob:
+        return render_templates_and_save(
+            cwd,
+            args.template,
+            context
+        )
+    else:
+        return render_template(
+            cwd,
+            args.template,
+            context
+        )
 
 
 def main():
@@ -123,4 +165,5 @@ def main():
         sys.stdin,
         sys.argv[1:]
     )
-    sys.stdout.write(output)
+    outstream = getattr(sys.stdout, 'buffer', sys.stdout)
+    outstream.write(output)

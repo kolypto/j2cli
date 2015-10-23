@@ -1,7 +1,8 @@
 import unittest
 import os.path
 
-from j2cli.cli import render_command
+from shinto_cli.cli import render_command
+
 
 class RenderTest(unittest.TestCase):
     def setUp(self):
@@ -23,8 +24,11 @@ class RenderTest(unittest.TestCase):
 
     def _testme(self, argv, stdin=None, env=None):
         """ Helper test shortcut """
-        self.assertEqual(self.expected_output,
-                         render_command(os.getcwd(), env or {}, stdin, argv))
+        result = render_command(os.getcwd(), env or {}, stdin, argv)
+        if(isinstance(result, str)):
+            self.assertEqual(self.expected_output, result)
+        else:
+            self.assertEqual(self.expected_output.encode('UTF-8'), result)
 
     def test_ini(self):
         # Filename
@@ -66,3 +70,25 @@ class RenderTest(unittest.TestCase):
         env = dict(NGINX_HOSTNAME='localhost', NGINX_WEBROOT='/var/www/project', NGINX_LOGS='/var/log/nginx/')
         self._testme(['--format=env', 'resources/nginx-env.j2'], env=env)
         self._testme(['--format=env', 'resources/nginx-env.j2'], env=env)
+
+    def test_glob(self):
+        self.assertTrue(render_command(os.getcwd(),
+                                       {},
+                                       None,
+                                       ['-g',
+                                        'resources/nginx-env*.j2',
+                                        'resources/data.env']) in
+                        ['[\'resources/nginx-env\', \'resources/nginx-env2\']',
+                         '[\'resources/nginx-env2\', \'resources/nginx-env\']'])
+        with open('resources/nginx-env', 'r') as f:
+            result = f.read()
+            if(isinstance(result, str)):
+                self.assertEqual(self.expected_output, result)
+            else:
+                self.assertEqual(self.expected_output.encode('UTF-8'), result)
+        with open('resources/nginx-env2', 'r') as f:
+            result = f.read()
+            if(isinstance(result, str)):
+                self.assertEqual(self.expected_output, result)
+            else:
+                self.assertEqual(self.expected_output.encode('UTF-8'), result)

@@ -4,19 +4,19 @@ import json
 import inspect
 from exdoc import doc, getmembers
 
-import j2cli
-import j2cli.context
-import j2cli.extras.filters
+import shinto_cli
+import shinto_cli.context
+import shinto_cli.extras.filters
 
 
 README = {
     'formats': {
         name: doc(f)
-        for name, f in j2cli.context.FORMATS.items()
+        for name, f in shinto_cli.context.FORMATS.items()
     },
     'extras': {
         'filters': [doc(v)
-                    for k, v in getmembers(j2cli.extras.filters)
+                    for k, v in getmembers(shinto_cli.extras.filters)
                     if inspect.isfunction(v)]
     }
 }

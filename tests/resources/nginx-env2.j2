@@ -1,0 +1,10 @@
+server {
+  listen 80;
+  server_name {{ NGINX_HOSTNAME }};
+
+  root {{ NGINX_WEBROOT }};
+  index index.htm;
+
+  access_log {{ NGINX_LOGS }}/http.access.log combined;
+  error_log  {{ NGINX_LOGS }}/http.error.log;
+}

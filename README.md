@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/kolypto/j2cli.svg)](https://travis-ci.org/kolypto/j2cli)
+[![Build Status](https://travis-ci.org/istrategylabs/shinto-cli.svg)](https://travis-ci.org/istrategylabs/shinto-cli)
 
-j2cli - Jinja2 Command-Line Tool
+shinto-cli - Jinja2 Command-Line Tool
 ================================
 
-`j2cli` is a command-line tool for templating in shell-scripts, 
+`shinto-cli` is a command-line tool for templating in shell-scripts, 
 leveraging the [Jinja2](http://jinja.pocoo.org/docs/) library.
 
 Features:
@@ -17,13 +17,13 @@ Inspired by [mattrobenolt/jinja2-cli](https://github.com/mattrobenolt/jinja2-cli
 ## Installation
 
 ```
-pip install j2cli
+pip install shinto-cli
 ```
 
 To enable the YAML support with [pyyaml](http://pyyaml.org/):
 
 ```
-pip install j2cli[yaml]
+pip install shinto-cli[yaml]
 ```
 
 ## Usage
@@ -61,6 +61,8 @@ Or even read environment variables from a file:
 Options:
 
 * `--format, -f`: format for the data file. The default is `?`: guess from file extension.
+
+* `--glob, -g`: allow globs for the template and writes files back without file extention. (e.g. "*.j2" writes "file1.html.j2" and "file2.html.j2" to "file1.html" and "file2.html" repectively)
 
 There is some special behavior with environment variables:
 
