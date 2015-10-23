@@ -1,4 +1,6 @@
-import os, sys
+from __future__ import unicode_literals
+
+import io, os, sys
 import argparse
 import glob
 
@@ -23,7 +25,7 @@ class FilePathLoader(jinja2.BaseLoader):
 
         # Read
         try:
-            with open(template, 'r') as f:
+            with io.open(template, 'rb') as f:
                 contents = f.read().decode(self.encoding)
         except IOError:
             raise jinja2.TemplateNotFound(template)
@@ -78,10 +80,9 @@ def render_templates_and_save(cwd, template_path, context):
     for file_path in file_paths:
         compiled = env \
             .get_template(file_path) \
-            .render(context) \
-            .encode('utf-8')
+            .render(context)
         filename = os.path.splitext(file_path)[0]
-        with open(filename, 'w') as f:
+        with io.open(filename, 'w') as f:
             f.write(compiled)
             written_files.append(filename)
     return str(written_files)
@@ -164,4 +165,5 @@ def main():
         sys.stdin,
         sys.argv[1:]
     )
-    sys.stdout.write(output)
+    outstream = getattr(sys.stdout, 'buffer', sys.stdout)
+    outstream.write(output)
