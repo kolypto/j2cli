@@ -112,8 +112,16 @@ def _parse_env(data_string):
                     one.strip()
                     for one in line.split('=',1)
                 ]
-                for line in data_string.split("\n"))
+                for line in data_string.split("\n")
+            )
         )
+        data=dict(data)
+        for k,v in data.items():
+            try:
+                data[k] = v.decode('utf-8')
+            except:
+                pass
+
     else:
         data = data_string
         if isinstance(data, os._Environ):
