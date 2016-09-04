@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, codecs
 import argparse
 
 import jinja2
@@ -98,7 +98,7 @@ def render_command(cwd, environ, stdin, argv):
     if args.data == '-' and args.format == 'env':
         input_data_f = None
     else:
-        input_data_f = stdin if args.data == '-' else open(args.data)
+        input_data_f = stdin if args.data == '-' else codecs.open(args.data, encoding='utf-8')
 
     # Read data
     context = read_context_data(
