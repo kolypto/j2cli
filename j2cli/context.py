@@ -1,4 +1,4 @@
-import sys
+import os
 
 #region Parsers
 
@@ -108,14 +108,22 @@ def _parse_env(data_string):
         data = filter(
             lambda l: len(l) == 2 ,
             (
-                map(
-                    str.strip,
-                    line.split('=')
-                )
+                [
+                    one.strip()
+                    for one in line.split('=',1)
+                ]
                 for line in data_string.split("\n"))
         )
     else:
         data = data_string
+        if isinstance(data, os._Environ):
+            data = dict(data_string)
+            for k,v in data.items():
+                if isinstance(v, basestring):
+                    try:
+                        data[k] = v.decode('utf-8')
+                    except:
+                        pass
 
     # Finish
     return data
