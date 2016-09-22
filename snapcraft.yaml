@@ -1,0 +1,28 @@
+name: j2
+version: 0.3.1-0
+summary: Command-line interface to Jinja2 for templating in shell scripts.
+description: |
+  Command-line interface to [Jinja2](http://jinja.pocoo.org/docs/) for templating in shell scripts.
+  
+  Features:
+  
+  Jinja2 templating
+  Allows to use environment variables! Hello [Docker](http://www.docker.com/) :)
+  INI, YAML, JSON data sources supported
+  Inspired by [mattrobenolt/jinja2-cli](https://github.com/mattrobenolt/jinja2-cli)
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+apps:
+    j2:
+        command: bin/j2
+        plugs:
+            - home
+
+parts:
+    pip:
+        plugin: python2
+        source: https://github.com/kolypto/j2cli.git
+        source-tag: v0.3.1
+        requirements: requirements.txt
