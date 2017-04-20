@@ -32,7 +32,11 @@ class FilePathLoader(jinja2.BaseLoader):
         return contents, filename, uptodate
 
 
-def render_template(cwd, template_path, context):
+def render_template(cwd,
+                    template_path,
+                    context,
+                    trim_blocks=False,
+                    lstrip_blocks=False):
     """ Render a template
     :param template_path: Path to the template file
     :type template_path: basestring
@@ -43,7 +47,9 @@ def render_template(cwd, template_path, context):
     """
     env = jinja2.Environment(
         loader=FilePathLoader(cwd),
-        undefined=jinja2.StrictUndefined # raises errors for undefined variables
+        undefined=jinja2.StrictUndefined, # raises errors for undefined variables
+        trim_blocks=trim_blocks,
+        lstrip_blocks=lstrip_blocks
     )
 
     # Register extras
@@ -75,6 +81,21 @@ def render_command(cwd, environ, stdin, argv):
     )
     parser.add_argument('-v', '--version', action='version',
                         version='j2cli {}, Jinja2 {}'.format(__version__, jinja2.__version__))
+
+    parser.add_argument('-t',
+                        '--trim-blocks',
+                        action='store_true',
+                        dest='trim_blocks',
+                        default=False,
+                        help=('Use trim_blocks when rendering template '
+                              '(Default: %(default)s)'))
+
+    parser.add_argument('-l',
+                        '--lstrip-blocks',
+                        action='store_true',
+                        dest='lstrip_blocks',
+                        help=('Use lstrip_blocks when rendering template '
+                              '(Default: %(default)s'))
 
     parser.add_argument('-f', '--format', default='?', help='Input data format', choices=['?'] + list(FORMATS.keys()))
     parser.add_argument('template', help='Template file to process')
@@ -111,7 +132,9 @@ def render_command(cwd, environ, stdin, argv):
     return render_template(
         cwd,
         args.template,
-        context
+        context,
+        trim_blocks=args.trim_blocks,
+        lstrip_blocks=args.lstrip_blocks
     )
 
 
