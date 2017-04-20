@@ -61,6 +61,8 @@ Or even read environment variables from a file:
 Options:
 
 * `--format, -f`: format for the data file. The default is `?`: guess from file extension.
+* `--trim-blocks, -t`: Use `trim_blocks=True` when rendering. The default is `False`.
+* `--lstrip-blocks, -l`: Use `lstrip_blocks=True` when rendering. The default is `False`.
 
 There is some special behavior with environment variables:
 
