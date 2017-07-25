@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kolypto/j2cli.svg)](https://travis-ci.org/kolypto/j2cli)
+[![Build Status](https://travis-ci.org/kolypto/j2cli.svg)](https://travis-ci.org/kolypto/j2cli) [![Snap Status](https://build.snapcraft.io/badge/cmars/j2cli.svg)](https://build.snapcraft.io/user/cmars/j2cli)
 
 j2cli - Jinja2 Command-Line Tool
 ================================
