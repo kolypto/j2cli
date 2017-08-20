@@ -48,6 +48,7 @@ def render_template(cwd, template_path, context):
 
     # Register extras
     env.filters['docker_link'] = filters.docker_link
+    env.filters['gpg'] =  filters.gpg
 
     return env \
         .get_template(template_path) \
