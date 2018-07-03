@@ -2,6 +2,7 @@
     "nginx":{
         "hostname": "localhost",
         "webroot": "/var/www/project",
-        "logs": "/var/log/nginx/"
+        "logs": "/var/log/nginx/",
+        "foobar": "foo=bar"
     }
 }

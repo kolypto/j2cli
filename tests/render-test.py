@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import unittest
 import os.path
 
@@ -12,6 +13,7 @@ class RenderTest(unittest.TestCase):
 
     #: The expected output
     expected_output = """server {
+  # foo=bar
   listen 80;
   server_name localhost;
 
@@ -67,7 +69,8 @@ class RenderTest(unittest.TestCase):
         self._testme(['--format=env', 'resources/nginx-env.j2', 'resources/data.env'])
 
         # Environment!
-        env = dict(NGINX_HOSTNAME='localhost', NGINX_WEBROOT='/var/www/project', NGINX_LOGS='/var/log/nginx/')
+        env = dict(NGINX_HOSTNAME='localhost', NGINX_WEBROOT='/var/www/project',
+                   NGINX_LOGS='/var/log/nginx/', FOOBAR="foo=bar")
         self._testme(['--format=env', 'resources/nginx-env.j2'], env=env)
         self._testme(['--format=env', 'resources/nginx-env.j2'], env=env)
 
@@ -92,3 +95,6 @@ class RenderTest(unittest.TestCase):
                 self.assertEqual(self.expected_output, result)
             else:
                 self.assertEqual(self.expected_output.encode('UTF-8'), result)
+
+if __name__ == '__main__':
+    unittest.main()

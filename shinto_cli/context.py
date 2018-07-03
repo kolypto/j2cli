@@ -111,15 +111,9 @@ def _parse_env(data_string):
     """
     # Parse
     if isinstance(data_string, basestring):
-        data = filter(
-            lambda l: len(l) == 2 ,
-            (
-                list(map(
-                    str.strip,
-                    line.split('=')
-                ))
-                for line in data_string.split("\n"))
-        )
+        data = [l.split("=", 1)
+                for l in data_string.split("\n")
+                if "=" in l]
     else:
         data = data_string
 
