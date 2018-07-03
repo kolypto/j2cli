@@ -27,6 +27,7 @@ setup(
     license='BSD',
     description='Command-line interface to Jinja2 for templating in shell scripts.',
     long_description=__doc__,
+    long_description_content_type='text/markdown',
     keywords=['Jinja2', 'templating', 'command-line', 'CLI'],
 
     packages=find_packages(),
