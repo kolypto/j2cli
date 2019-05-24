@@ -131,6 +131,13 @@ Options:
     (This will overwrite any existing variables!)
 * `-o outfile`: Write rendered template to a file
 * `--undefined`: Allow undefined variables to be used in templates (no error will be raised)
+* `--environment-config`: Provide a config file (format guessed from file
+  extension) containing key/value pairs that can be passed to Jinja2's
+  [Environment
+  configuration](http://jinja.pocoo.org/docs/2.10/api/#jinja2.Environment). This
+  can be handy for tweaking the way your templates are processed by Jinja2, for
+  example providing a YAML file with "lstrip_blocks: true" can configure Jinja2
+  to produce less whitespace in the output.
 
 * `--filters filters.py`: Load custom Jinja2 filters and tests from a Python file.
     Will load all top-level functions and register them as filters.

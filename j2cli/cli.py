@@ -44,12 +44,13 @@ class Jinja2TemplateRenderer(object):
         'jinja2.ext.loopcontrols',
     )
 
-    def __init__(self, cwd, allow_undefined):
+    def __init__(self, cwd, allow_undefined, environment_config=None):
         self._env = jinja2.Environment(
             extensions=self.ENABLED_EXTENSIONS,
             loader=FilePathLoader(cwd),
             undefined=jinja2.Undefined if allow_undefined else jinja2.StrictUndefined,  # raise errors for undefineds?
-            keep_trailing_newline=True
+            keep_trailing_newline=True,
+            **(environment_config or {})
         )
 
     def register_filters(self, filters):
@@ -113,23 +114,27 @@ def render_command(cwd, environ, stdin, argv):
     parser.add_argument('--tests', nargs='+', default=[], metavar='python-file', dest='tests',
                         help='Load custom Jinja2 tests from a Python file.')
     parser.add_argument('--undefined', action='store_true', dest='undefined', help='Allow undefined variables to be used in templates (no error will be raised)')
+    parser.add_argument('--environment-config', required=False)
     parser.add_argument('-o', metavar='outfile', dest='output_file', help="Output to a file instead of stdout")
     parser.add_argument('template', help='Template file to process')
     parser.add_argument('data', nargs='?', default='-', help='Input data path')
     args = parser.parse_args(argv)
+
+    def guess_format(filename):
+        return {
+            '.ini': 'ini',
+            '.json': 'json',
+            '.yml': 'yaml',
+            '.yaml': 'yaml',
+            '.env': 'env'
+        }[os.path.splitext(filename)[1]]
 
     # Input: guess format
     if args.format == '?':
         if args.data == '-':
             args.format = 'env'
         else:
-            args.format = {
-                '.ini': 'ini',
-                '.json': 'json',
-                '.yml': 'yaml',
-                '.yaml': 'yaml',
-                '.env': 'env'
-            }[os.path.splitext(args.data)[1]]
+            args.format = guess_format(args.data)
 
     # Input: data
     if args.data == '-' and args.format == 'env':
@@ -149,8 +154,16 @@ def render_command(cwd, environ, stdin, argv):
         args.import_env
     )
 
+    if args.environment_config:
+        with open(args.environment_config) as env_config_f:
+            env_config = read_context_data(guess_format(args.environment_config),
+                                           env_config_f)
+
+    else:
+        env_config = None
+
     # Renderer
-    renderer = Jinja2TemplateRenderer(cwd, args.undefined)
+    renderer = Jinja2TemplateRenderer(cwd, args.undefined, env_config)
 
     # Filters, Tests
     renderer.register_filters({

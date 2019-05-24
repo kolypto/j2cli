@@ -175,7 +175,7 @@ except ImportError:
 
 
 
-def read_context_data(format, f, environ, import_env=None):
+def read_context_data(format, f, environ=None, import_env=None):
     """ Read context data into a dictionary
     :param format: Data format
     :type format: str
