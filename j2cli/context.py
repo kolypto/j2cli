@@ -189,24 +189,22 @@ def read_context_data(format, f, environ, import_env=None):
     :rtype: dict
     """
 
-    # Special case: environment variables
-    if format == 'env' and f is None:
-        return _parse_env(environ)
-
-    # Read data string stream
-    data_string = f.read()
-
     # Parse it
     if format not in FORMATS:
         raise ValueError('{0} format unavailable'.format(format))
-    context = FORMATS[format](data_string)
-
+    elif format == 'env' and f is None:
+        # Special case: environment variables
+        parsed = _parse_env(environ)
+    else:
+        # Otherwise read data string stream
+        data_string = f.read()
+        parsed = dict(FORMATS[format](data_string))
+    
     # Import environment
-    if import_env is not None:
-        if import_env == '':
-            context.update(environ)
-        else:
-            context[import_env] = environ
+    if import_env is not None and import_env != '':
+        context = { import_env: parsed }
+    else:
+        context = parsed
 
     # Done
     return context
