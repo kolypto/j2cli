@@ -64,7 +64,7 @@ def _parse_json(data_string):
     Usage:
 
         $ j2 config.j2 data.json
-        $ cat data.json | j2 --format=ini config.j2
+        $ cat data.json | j2 --format=json config.j2
     """
     return json.loads(data_string)
 
