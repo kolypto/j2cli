@@ -186,6 +186,20 @@ def render_command(cwd, environ, stdin, argv):
     renderer = Jinja2TemplateRenderer(cwd, args.undefined, j2_env_params=customize.j2_environment_params())
     customize.j2_environment(renderer._env)
 
+    # Ansible filters - if available
+    try:
+        from ansible.plugins.filter import core as ansible_core_filters
+        from ansible.plugins.filter import urls as ansible_urls_filters
+        from ansible.plugins.filter import urlsplit as ansible_urlsplit_filters
+        from ansible.plugins.filter import mathstuff as ansible_mathstuff_filters
+
+        renderer.register_filters(ansible_core_filters.FilterModule().filters())
+        renderer.register_filters(ansible_urls_filters.FilterModule().filters())
+        renderer.register_filters(ansible_urlsplit_filters.FilterModule().filters())
+        renderer.register_filters(ansible_mathstuff_filters.FilterModule().filters())
+    except ImportError:
+        pass
+
     # Filters, Tests
     renderer.register_filters({
         'docker_link': filters.docker_link,
