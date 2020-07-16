@@ -303,7 +303,7 @@ Notice that there must be quotes around the environment variable name
 
 You can use the `jinja2-ansible-filters` package like so:
 
-- `pipr install jinja2-ansible-filters`
+- `pip3 install jinja2-ansible-filters`
 - `ansiblefilters_path=$(python3 -c "import jinja2_ansible_filters; print(jinja2_ansible_filters.core_filters.__file__)")`
 - Then invoke with: `j2 --filters=$ansiblefilters_path [...]`
 
