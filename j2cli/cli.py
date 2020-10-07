@@ -190,6 +190,7 @@ def render_command(cwd, environ, stdin, argv):
     renderer.register_filters({
         'docker_link': filters.docker_link,
         'env': filters.env,
+        'bool': bool,
     })
     for fname in args.filters:
         renderer.import_filters(fname)
