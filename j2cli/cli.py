@@ -44,10 +44,12 @@ class Jinja2TemplateRenderer(object):
         'jinja2.ext.loopcontrols',
     )
 
-    def __init__(self, cwd, allow_undefined, j2_env_params):
+    def __init__(self, cwd, allow_undefined, no_compact=False, j2_env_params={}):
         # Custom env params
         j2_env_params.setdefault('keep_trailing_newline', True)
         j2_env_params.setdefault('undefined', jinja2.Undefined if allow_undefined else jinja2.StrictUndefined)
+        j2_env_params.setdefault('trim_blocks', not no_compact)
+        j2_env_params.setdefault('lstrip_blocks', not no_compact)
         j2_env_params.setdefault('extensions', self.ENABLED_EXTENSIONS)
         j2_env_params.setdefault('loader', FilePathLoader(cwd))
 
@@ -118,7 +120,10 @@ def render_command(cwd, environ, stdin, argv):
                         help='Load custom Jinja2 tests from a Python file.')
     parser.add_argument('--customize', default=None, metavar='python-file.py', dest='customize',
                         help='A Python file that implements hooks to fine-tune the j2cli behavior')
-    parser.add_argument('--undefined', action='store_true', dest='undefined', help='Allow undefined variables to be used in templates (no error will be raised)')
+    parser.add_argument('--no-compact', action='store_true', dest='no_compact',
+                        help='Do not compact space around Jinja2 blocks.')
+    parser.add_argument('-U', '--undefined', action='store_true', dest='undefined',
+                        help='Allow undefined variables to be used in templates (no error will be raised.)')
     parser.add_argument('-o', metavar='outfile', dest='output_file', help="Output to a file instead of stdout")
     parser.add_argument('template', help='Template file to process')
     parser.add_argument('data', nargs='?', default=None, help='Input data file path; "-" to use stdin')
@@ -183,7 +188,7 @@ def render_command(cwd, environ, stdin, argv):
     context = customize.alter_context(context)
 
     # Renderer
-    renderer = Jinja2TemplateRenderer(cwd, args.undefined, j2_env_params=customize.j2_environment_params())
+    renderer = Jinja2TemplateRenderer(cwd, args.undefined, args.no_compact, j2_env_params=customize.j2_environment_params())
     customize.j2_environment(renderer._env)
 
     # Filters, Tests

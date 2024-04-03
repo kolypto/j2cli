@@ -1,10 +1,5 @@
+import six
 import sys
-
-# Patch basestring in for python 3 compat
-try:
-    basestring
-except NameError:
-    basestring = str
 
 #region Parsers
 
@@ -120,7 +115,7 @@ def _parse_env(data_string):
         $ j2 config.j2 - < data.env
     """
     # Parse
-    if isinstance(data_string, basestring):
+    if isinstance(data_string, six.string_types):
         data = filter(
             lambda l: len(l) == 2 ,
             (

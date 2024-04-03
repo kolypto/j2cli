@@ -47,6 +47,7 @@ setup(
 
     install_requires=[
         'jinja2 >= 2.7.2',
+        'six >= 1.10',
     ],
     extras_require={
         'yaml': [pyyaml_version,]
