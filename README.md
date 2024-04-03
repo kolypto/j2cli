@@ -43,6 +43,18 @@ To enable the YAML support with [pyyaml](http://pyyaml.org/):
 pip install j2cli[yaml]
 ```
 
+To enable [ansible filters](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#filters):
+
+```
+pip install j2cli[ansible]
+```
+
+Or both with
+
+```
+pip install j2cli[all]
+```
+
 ## Tutorial
 
 Suppose, you want to have an nginx configuration file template, `nginx.j2`:

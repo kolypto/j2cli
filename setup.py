@@ -49,7 +49,9 @@ setup(
         'jinja2 >= 2.7.2',
     ],
     extras_require={
-        'yaml': [pyyaml_version,]
+        'yaml': [pyyaml_version,],
+        'ansible': ['ansible >= 2.9.10',],
+        'all': [pyyaml_version, 'ansible >= 2.9.10',],
     },
     include_package_data=True,
     zip_safe=False,
